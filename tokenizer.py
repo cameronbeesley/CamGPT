@@ -56,10 +56,15 @@ class Word:
             - Create new token or find in token_map
             - Replace pair with new token
         '''
+        length = len(self.tokens)
         token1, token2 = pair
 
+        if length <= 1:
+            return
+
         # iterating throught the tokens, excluding the last
-        for i in range(len(self.tokens)-1):
+        i = 0
+        while i < length -1:
 
             # comparing the token to the first in the pair
             if self.tokens[i] == token1:
@@ -79,7 +84,12 @@ class Word:
                         ending = self.tokens[i+2:]
                     except:
                         ending = []
-                    self.tokens = beginnning + [new_token] + ending
+
+                    self.tokens = beginnning + [new_token] + ending # this is the problem
+                    length -= 1
+
+            i += 1
+
 
     def get_create_new_token(self, token1: Token, token2: Token, token_map: dict[str, Token]) -> Token:
         '''
@@ -211,8 +221,8 @@ class Tokenizer:
             
 
 
-sentence = "the cat in the hat sat on the mat"
-tokenizer = Tokenizer(100)
+sentence = "Although Doctor Elena Vasquez-Chen had painstakingly reviewed nearly every line of Python code in the sprawling, labyrinthine codebase before dawn broke over the office, she still couldn't figure out why the API's rate-limiter—implemented using a sliding-window algorithm renowned for its elegance—kept throwing RateLimitExceeded errors whenever concurrent requests overwhelmed the fragile, underprovisioned server cluster, especially since her meticulously written unit tests (crafted in pytest, complete with mocked timestamps and painstakingly isolated edge cases) had sailed through the CI/CD pipeline running on AWS's notoriously finicky us-east-1 region, leaving her equal parts bewildered, exasperated, and quietly impressed by the sheer, almost mischievous unpredictability of distributed systems!"
+tokenizer = Tokenizer(1000)
 words = tokenizer.tokinize(sentence)
 tokens = []
 for word in words:
