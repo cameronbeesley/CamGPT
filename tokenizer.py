@@ -27,6 +27,26 @@ class Tokenizer:
         chunks = regex.findall(pattern, text)
         return chunks
 
+    def _text_encoder(self, raw_chunks: list[str]) -> list[list[int]]:
+        '''
+        Takes the raw chunks and encodes them
+        Returns a list of encoded chucks
+        '''
+        encoded_chunks: list[list[int]] = []
+        for chunk in raw_chunks:
+            encoded_chunks.append(self._chunk_encoder(chunk))
+        return encoded_chunks
+
+    def _text_dencoder(self, encoded_chunks: list[list[int]]) -> list[str]:
+            '''
+            Takes the encoded chunks and dencodes them
+            Returns a list of dencoded chucks
+            '''
+            dencoded_chunks: list[str] = []
+            for chunk in encoded_chunks:
+                dencoded_chunks.append(self._chunk_decoder(chunk))
+            return dencoded_chunks
+
 tokenizer = Tokenizer()
 
 text = "Once upon a time, long      long ago... There was a man. This man's name was Bob!"
@@ -34,8 +54,9 @@ text = "Once upon a time, long      long ago... There was a man. This man's name
 chunks = tokenizer._seperator(text)
 print(chunks)
 
-ids = tokenizer._chunk_encoder("Hello")
-print(ids)
-s = tokenizer._chunk_decoder(ids)
-print(s)
+encoded_chunks = tokenizer._text_encoder(chunks)
+print(encoded_chunks)
+
+dencoded_chunks = tokenizer._text_dencoder(encoded_chunks)
+print(dencoded_chunks)
 
